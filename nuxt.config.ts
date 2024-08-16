@@ -22,6 +22,11 @@ export default defineNuxtConfig({
     ]
   }
 },
+/*
+  ** Customize the progress-bar color
+  */
+  //loading: { color: '#fff' }, NOT COMPATIBLE IN NUXT 3 YET
+  /*
 css: [
   "leaflet.markercluster/dist/MarkerCluster.css",
   "leaflet.markercluster/dist/MarkerCluster.Default.css",
