@@ -10,8 +10,10 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "leaflet.markercluster": "^1.5.3",
     "nuxt": "^3.12.4",
-    "vue": "latest"
+    "vue": "latest",
+    "vue-slider-component": "^3.2.24"
   },
   "devDependencies": {
     "@types/estree": "^1.0.5",

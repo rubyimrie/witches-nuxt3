@@ -2,9 +2,12 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  axios: {
-    // extra config e.g
-    baseURL: process.env.NODE_ENV === 'development' ? "http://localhost:8181" : 'https://witches.is.ed.ac.uk'
+  runtimeConfig: {
+    public: {
+      baseURL: process.env.NODE_ENV === 'development'
+        ? 'http://localhost:8181'
+        : 'https://witches.is.ed.ac.uk'
+    }
   },
   app:{
   head: {
@@ -19,4 +22,9 @@ export default defineNuxtConfig({
     ]
   }
 },
+css: [
+  "leaflet.markercluster/dist/MarkerCluster.css",
+  "leaflet.markercluster/dist/MarkerCluster.Default.css",
+  "vue-slider-component/theme/default.css",
+],
 })
