@@ -27,4 +27,14 @@ css: [
   "leaflet.markercluster/dist/MarkerCluster.Default.css",
   "vue-slider-component/theme/default.css",
 ],
+  /*
+  ** Nuxt.js modules
+  */
+  modules: [
+      '@nuxtjs/tailwindcss',
+      '@nuxtjs/leaflet',
+      //'vue-sweetalert2/nuxt', NOT COMPATATIBLE WITH NUXT 3 YET
+      // 'nuxt-webfontloader', NOT COMPATATIBLE WITH NUXT 3 YET
+  ],
+  
 })
