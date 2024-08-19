@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import VueCookies from 'vue-cookies'
+import VueCookies from 'vue-cookies' //CHECK IF COMPATIBLE WITH NUXT 3
 
 export default {
   components: { VueCookies },

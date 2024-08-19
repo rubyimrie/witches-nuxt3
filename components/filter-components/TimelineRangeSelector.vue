@@ -21,10 +21,11 @@
     <div class="ml-6 lg:ml-8 mt-2 flex mb-2"
          v-if="recommendedOn"
          @click="scrollRecommendedIntoView()">
-      <v-select :options="recommendedOptions"
-                placeholder="(recommended ranges)"
-                v-model="recommendedRange">
-      </v-select>
+         <USelect
+          :options="recommendedOptions"
+          placeholder="(recommended ranges)"
+          v-model="recommendedRange"
+        />
     </div>
 
     <div class="flex pl-2 py-1 flex-wrap items-center mt-2
@@ -40,28 +41,28 @@
 
     <div v-if="customSelectorOn" 
          class="ml-6 lg:ml-8 mt-2 flex flex-col">
-      <date-picker v-model="customInputRange" 
+      <VueDatePicker v-model="customInputRange" 
                    range :placeholder="defaultMessage"
                    valueType="date"
                    format="DD-MM-YYYY"
                    :default-value="defaultRangeCustom"
                    :disabled-date="getEnabledDateRange"
                    :lang="lang">
-      </date-picker>
+      </VueDatePicker>
     </div>
 
   </div>
 </template>
 
 <script>
-import DatePicker from 'vue2-datepicker';
-import 'vue2-datepicker/index.css';
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+//import vSelect from 'vue-select' //not compatable nuxt 3
+//import 'vue-select/dist/vue-select.css';
 import TimelineMethods from '../../assets/js/TimelineMethods';
 
 export default {
-  components: { DatePicker, vSelect },
+  components: { VueDatePicker },
   data() {
     return {
       panicsRanges: [

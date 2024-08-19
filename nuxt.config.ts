@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       baseURL: process.env.NODE_ENV === 'development'
-        ? 'http://localhost:8181'
+        ? 'https://witches.is.ed.ac.uk'
         : 'https://witches.is.ed.ac.uk'
     }
   },
@@ -22,15 +22,15 @@ export default defineNuxtConfig({
     ]
   }
 },
-/*
-  ** Customize the progress-bar color
-  */
-  //loading: { color: '#fff' }, NOT COMPATIBLE IN NUXT 3 YET
-  /*
 css: [
   "leaflet.markercluster/dist/MarkerCluster.css",
   "leaflet.markercluster/dist/MarkerCluster.Default.css",
   "vue-slider-component/theme/default.css",
+],
+plugins: [
+  {src: "~/plugins/markercluster",ssr: false},
+  {src: "~/plugins/slider",ssr: false},
+  { src: "~/plugins/vue-google-analytics", mode: "client"},
 ],
   /*
   ** Nuxt.js modules
@@ -38,8 +38,38 @@ css: [
   modules: [
       '@nuxtjs/tailwindcss',
       '@nuxtjs/leaflet',
+      '@pinia/nuxt'
       //'vue-sweetalert2/nuxt', NOT COMPATATIBLE WITH NUXT 3 YET
       // 'nuxt-webfontloader', NOT COMPATATIBLE WITH NUXT 3 YET
   ],
+  build: {
+    transpile: ['@vuepic/vue-datepicker']
+},
+purgeCSS: {
+  whitelist: ['lvml'],
+  whitelistPatterns: [
+      /leaflet-.+$/,
+      /vue-slider.+$/
+  ],
+  whitelistPatternsChildren: [
+      /leaflet-.+$/
+      ,/vue-slider.+$/
+  ]
+},
+webfontloader: {
+  google: {
+      families: ['EB+Garamond:400,700', 'Roboto:300,400,500'] //Loads Lato font with weights 400 and 700
+  }
+},
+/*
+** Build configuration
+*/
+build: {
+/*
+** You can extend webpack config here
+*/
+extend(config, ctx) {
+}
+},
   
 })
