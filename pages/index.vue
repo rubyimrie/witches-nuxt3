@@ -184,7 +184,7 @@ export default {
       console.log('Fetched icons:', icons);
 
       try {
-        const { data, error } = await useFetch('https://witches.is.ed.ac.uk/main.php?type=accused');
+        const { data, error } = await useMyFetch('/main.php?type=accused');
         if (error.value) {
           console.error('Error fetching data:', error.value);
           return;
