@@ -184,9 +184,13 @@ export default {
       console.log('Fetched icons:', icons);
 
       try {
-        const { data } = await useFetch('/main.php?type=accused');
-        console.log('Fetched data from API:', data);
-        this.queryOutput = data;
+        const { data, error } = await useFetch('/main.php?type=accused');
+        if (error.value) {
+          console.error('Error fetching data:', error.value);
+          return;
+        }
+        console.log('Fetched data from API:', data.value);
+        this.queryOutput = data.value;
       } catch (e) {
         console.error('Error fetching data:', e);
         return;
