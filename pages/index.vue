@@ -184,7 +184,7 @@ export default {
       console.log('Fetched icons:', icons);
 
       try {
-        const { data, error } = await useFetch('/main.php?type=accused');
+        const { data, error } = await useFetch('https://witches.is.ed.ac.uk/main.php?type=accused');
         if (error.value) {
           console.error('Error fetching data:', error.value);
           return;
@@ -196,24 +196,33 @@ export default {
         return;
       }
 
-      const getData = new APIDataHandler(
-        this.queryOutput, this.wikiPages,
-        icons, null
-      );
-      const filtersFound = null;
+      // Use 'let' instead of 'const' to allow reassignment
+      let filtersFound;
 
-      [this.originalMarkers, filtersFound] = getData.loadAccussed('residence', this.filtersToFind);
+      try {
+        const getData = new APIDataHandler(
+          this.queryOutput, this.wikiPages,
+          icons, null
+        );
 
-      console.log('Loaded originalMarkers and filtersFound:', {
-        originalMarkers: this.originalMarkers,
-        filtersFound
-      });
+        // Ensure you are not destructuring into a constant
+        [this.originalMarkers, filtersFound] = getData.loadAccussed('residence', this.filtersToFind);
 
-      this.filterProperties.socialClass.filters = filtersFound.socialClass;
-      this.filterProperties.occupation.filters = filtersFound.occupation;
-      this.setMarkersIcons();
-      this.loading = false;
-    }
+        console.log('Loaded originalMarkers and filtersFound:', {
+          originalMarkers: this.originalMarkers,
+          filtersFound
+        });
+
+        this.filterProperties.socialClass.filters = filtersFound.socialClass;
+        this.filterProperties.occupation.filters = filtersFound.occupation;
+        this.setMarkersIcons();
+        this.loading = false;
+      } catch (e) {
+        console.error('Error processing data:', e);
+        this.loading = false;
+      }
+}
+
   },
   mounted() {
     console.log('Component mounted, starting data load...');
