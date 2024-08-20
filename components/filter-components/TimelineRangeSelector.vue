@@ -19,13 +19,16 @@
     </div>
 
     <div class="ml-6 lg:ml-8 mt-2 flex mb-2"
-         v-if="recommendedOn"
-         @click="scrollRecommendedIntoView()">
-         <USelect
-          :options="recommendedOptions"
-          placeholder="(recommended ranges)"
-          v-model="recommendedRange"
-        />
+         v-if="recommendedOn">
+         <Vueform>
+         <SelectElement 
+                  v-model="recommendedRange"
+                  :items="recommendedOptions"
+                  :native="true"
+                  @change="handleRecommendedRange"
+                  placeholder="(recommended ranges)"
+                   />
+          </Vueform>
     </div>
 
     <div class="flex pl-2 py-1 flex-wrap items-center mt-2
@@ -62,7 +65,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import TimelineMethods from '../../assets/js/TimelineMethods';
 
 export default {
-  components: { VueDatePicker },
+  components: { VueDatePicker},
   data() {
     return {
       panicsRanges: [
@@ -87,21 +90,21 @@ export default {
         new Date("1727-06-12T00:00:00.000Z")
       ],
       recommendedOptions: [
-        { label: "1563-89 (non-panic period)", index: 0 },
-        { label: "1590-91 (panic period)", index: 1 },
-        { label: "1592-96 (non-panic period)", index: 2 },
-        { label: "1597 (panic period)", index: 3 },
-        { label: "1598-1627 (non-panic period)", index: 4 },
-        { label: "1628-31 (panic period)", index: 5 },
-        { label: "1632-42 (non-panic period)", index: 6 },
-        { label: "1643-44 (panic period)", index: 7 },
-        { label: "1645-48 (non-panic period)", index: 8 },
-        { label: "1649-50 (panic period)", index: 9 },
-        { label: "1651-57 (non-panic period)", index: 10 },
-        { label: "1658-59 (panic period)", index: 11 },
-        { label: "1660 (non-panic period)", index: 12 },
-        { label: "1661-62 (panic period)", index: 13 },
-        { label: "1663-1736 (non-panic period)", index: 14 }
+      { value: 0, label: "1563-89 (non-panic period)" }, 
+      { value: 1, label: "1590-91 (panic period)" },
+      { value: 2, label: "1592-96 (non-panic period)" },
+      { value: 3, label: "1597 (panic period)" },
+      { value: 4, label: "1598-1627 (non-panic period)" },
+      { value: 5, label: "1628-31 (panic period)" },
+      { value: 6, label: "1632-42 (non-panic period)" },
+      { value: 7, label: "1643-44 (panic period)" },
+      { value: 8, label: "1645-48 (non-panic period)" },
+      { value: 9, label: "1649-50 (panic period)" },
+      { value: 10, label: "1651-57 (non-panic period)" },
+      { value: 11, label: "1658-59 (panic period)" },
+      { value: 12, label: "1660 (non-panic period)" },
+      { value: 13, label: "1661-62 (panic period)" },
+      { value: 14, label: "1663-1736 (non-panic period)" }
       ],
       recommendedOn: true,
       recommendedRange: null,
@@ -118,15 +121,6 @@ export default {
     }
   },
   watch: {
-    recommendedRange(newRecommendedRange, oldQuestion) {
-      if (newRecommendedRange !== null) {
-        let index = newRecommendedRange.index;
-        let dateRange = this.panicsRanges[index];
-        let startRange = [dateRange[0], dateRange[1]];
-        this.$emit("scrollHeaderIntoView")
-        this.$emit("selectedDateRange", [dateRange, startRange]);
-      }
-    },
     customInputRange(newCustomInputRange) {
       if (newCustomInputRange) {
         this.$emit("selectedDateRange", [newCustomInputRange, newCustomInputRange]);
@@ -138,6 +132,17 @@ export default {
   methods: {
     getEnabledDateRange: function (date) {
       return date < this.fullRange[0] || date > this.fullRange[1]
+    },
+    handleRecommendedRange(newRecommendedRange) {
+      if (newRecommendedRange !== null) {
+        console.log("Recommended Range changed 1:", newRecommendedRange); 
+        let value = newRecommendedRange;
+        let dateRange = this.panicsRanges[value];
+        let startRange = [dateRange[0], dateRange[1]];
+        this.$emit("scrollHeaderIntoView")
+        this.$emit("selectedDateRange", [dateRange, startRange]);
+        console.log("Recommended Range changed:", [dateRange, startRange]); 
+      }
     },
     toggleCustomSelector: function () {
       this.customSelectorOn = !this.customSelectorOn;
@@ -155,7 +160,7 @@ export default {
   },
   computed: {
     defaultMessage() {
-      return "Default: " + this.defaultRangeCustomSrt[0] + "~" + this.defaultRangeCustomSrt[1]
+      return "Default: " + this.defaultRangeCustomSrt[0] + "~" + this.defaultRangeCustomSrt[1];
     }
   }
 }
