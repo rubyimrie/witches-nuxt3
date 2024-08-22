@@ -43,7 +43,6 @@ plugins: [
       // 'nuxt-webfontloader', NOT COMPATATIBLE WITH NUXT 3 YET
   ],
   build: {
-    transpile: ['@vuepic/vue-datepicker']
 },
 purgeCSS: {
   whitelist: ['lvml'],
