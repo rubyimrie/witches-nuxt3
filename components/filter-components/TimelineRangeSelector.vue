@@ -21,11 +21,11 @@
          v-if="recommendedOn">
          <Vueform>
          <SelectElement 
+                  name="select"
                   v-model="recommendedRange"
                   :items="recommendedOptions"
                   :native="true"
                   @change="handleRecommendedRange"
-                  @click="scrollRecommendedIntoView"
                   placeholder="(recommended ranges)"
                    />
           </Vueform>
@@ -148,17 +148,14 @@ export default {
     },
     handleRecommendedRange(newRecommendedRange) {
       if (newRecommendedRange !== null) {
-        console.log("Recommended Range changed 1:", newRecommendedRange); 
         let value = newRecommendedRange;
         let dateRange = this.panicsRanges[value];
         let startRange = [dateRange[0], dateRange[1]];
         this.$emit("scrollHeaderIntoView")
         this.$emit("selectedDateRange", [dateRange, startRange]);
-        console.log("Recommended Range changed:", [dateRange, startRange]); 
       }
     },
     handleCustomInputRange(newCustomInputRange) {
-      console.log('New custom input range:', newCustomInputRange);
       this.customInputRange = newCustomInputRange;
     },
     toggleCustomSelector: function () {
