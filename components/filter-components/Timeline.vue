@@ -9,13 +9,16 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </div>
-      <vue-slider class=""
-                  v-model="rangeValue"
-                  :data="dates"
-                  :data-value="'date'"
-                  :data-label="'label'"
-                  :marks="markers">
-      </vue-slider>
+      <Vueform>
+        <SliderElement name="slider"
+        v-model="numberRangeValue"
+        :min="0"
+        :max="max"
+        :default="[0,max]"
+        :format="getDateLabel" 
+        :merge="5"
+        @change="handleCustomInputRangeChange"/>
+      </Vueform>
     </div>  
   </div>
 </template>
@@ -41,16 +44,31 @@ export default {
   },
   data() {
     return {
-      rangeValue: [this.startRange[0].toString(), this.startRange[1].toString()],
+      numberRangeValue: [0,0],
       dates: this.timelineDates,
       markers: this.timelineMarkers,
       timelineShowing: true
     }
   },
   watch: {
-    rangeValue(newRange, oldQuestion) {
-      this.$emit("updatedRangeValue", newRange);
+   numberRangeValue(newRange) {
+      // Convert the slider range values to Date objects
+      const dateRange = [
+        this.parseDate(this.dates[newRange[0]].label),
+        this.parseDate(this.dates[newRange[1]].label)
+      ];
+      
+      // Emit the updated date range
+      this.$emit("updatedRangeValue", dateRange);
+      
+      // Debug output
+      console.log("Updated Date Range", dateRange);
     }
+  },
+  computed:{
+    max() {
+    return this.dates.length - 1;
+  }
   },
   methods: {
     emitRange: function (rangeValue) {
@@ -59,7 +77,19 @@ export default {
     toggleTimelineShowing() {
       this.timelineShowing = !this.timelineShowing;
       this.$emit('timelineToggled', this.timelineShowing);
-    }
+    },
+    getDateLabel(value){
+      return this.dates[value].label;
+    },
+    handleCustomInputRangeChange(newCustomInputRange) {
+      this.numberRangeValue = newCustomInputRange;
+    },
+    parseDate(dateStr) {
+      // Convert DD/MM/YYYY to Date object
+      const [day, month, year] = dateStr.split('/').map(Number);
+      // Note: JavaScript Date months are 0-indexed, so subtract 1 from month and day
+      return new Date(year, month - 1, day -1);
+    },
   }
 }
 </script>

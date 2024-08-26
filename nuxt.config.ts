@@ -24,12 +24,10 @@ export default defineNuxtConfig({
 },
 css: [
   "leaflet.markercluster/dist/MarkerCluster.css",
-  "leaflet.markercluster/dist/MarkerCluster.Default.css",
-  "vue-slider-component/theme/default.css",
+  "leaflet.markercluster/dist/MarkerCluster.Default.css"
 ],
 plugins: [
   {src: "~/plugins/markercluster",ssr: false},
-  {src: "~/plugins/slider",ssr: false},
   { src: "~/plugins/vue-google-analytics", mode: "client"},
 ],
   /*
