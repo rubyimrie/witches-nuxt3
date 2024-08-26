@@ -1,6 +1,5 @@
 <template>
   <div class="ml-4 mt-2 flex flex-col">
-
     <div class="flex items-center">
       <div class="title-point"></div>
       <p>Choose slider date range: </p>
@@ -18,10 +17,11 @@
             class="w-6 h-6" />
     </div>
 
-    <div class="ml-6 lg:ml-8 mt-2 flex mb-2"
+    <div class="ml-2 lg:ml-8 mt-2 flex mb-2"
          v-if="recommendedOn">
          <Vueform>
          <SelectElement 
+                  name="select"
                   v-model="recommendedRange"
                   :items="recommendedOptions"
                   :native="true"
@@ -43,29 +43,39 @@
     </div>
 
     <div v-if="customSelectorOn" 
-         class="ml-6 lg:ml-8 mt-2 flex flex-col">
-      <VueDatePicker v-model="customInputRange" 
-                   range :placeholder="defaultMessage"
-                   valueType="date"
-                   format="DD-MM-YYYY"
-                   :default-value="defaultRangeCustom"
-                   :disabled-date="getEnabledDateRange"
-                   :lang="lang">
-      </VueDatePicker>
+         class="ml-2 lg:ml-8 mt-2 flex flex-col">
+         <Vueform>
+          <DatesElement name="dates"
+          display-format="DD MMMM YYYY"
+          v-model="customInputRange"
+          mode="range"
+          :disables="getEnabledDateRange"
+          :default="defaultRangeCustom"
+          :placeholder="defaultMessage"
+          value-format="DD-MM-YYYY"
+          load-format="DD-MM-YYYY"
+          @change="handleCustomInputRange"
+           />
+        </Vueform>
     </div>
-
   </div>
 </template>
 
 <script>
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
 //import vSelect from 'vue-select' //not compatable nuxt 3
 //import 'vue-select/dist/vue-select.css';
 import TimelineMethods from '../../assets/js/TimelineMethods';
+/* <DatesElement v-model="customInputRange" 
+          name="dates" 
+          load-format="DD/MM/YYYY"  
+          mode="range" 
+          :placeholder="defaultMessage"
+          :disabled="getEnabledDateRange"/> */
+
+
 
 export default {
-  components: { VueDatePicker},
+  components: {},
   data() {
     return {
       panicsRanges: [
@@ -122,12 +132,15 @@ export default {
   },
   watch: {
     customInputRange(newCustomInputRange) {
-      if (newCustomInputRange) {
-        this.$emit("selectedDateRange", [newCustomInputRange, newCustomInputRange]);
-      } else {
-        this.$emit("selectedDateRange", [this.defaultRangeCustom, this.defaultRangeCustom])
+      console.log('New custom input range:', newCustomInputRange);
+      if (newCustomInputRange && newCustomInputRange.length === 2) {
+        const parsedDates = newCustomInputRange.map(dateStr => {
+          const [day, month, year] = dateStr.split('-').map(Number);
+          return new Date(year, month - 1, day); 
+        });
+        this.$emit("selectedDateRange", [parsedDates,parsedDates]);
       }
-    },
+    }
   },
   methods: {
     getEnabledDateRange: function (date) {
@@ -135,14 +148,15 @@ export default {
     },
     handleRecommendedRange(newRecommendedRange) {
       if (newRecommendedRange !== null) {
-        console.log("Recommended Range changed 1:", newRecommendedRange); 
         let value = newRecommendedRange;
         let dateRange = this.panicsRanges[value];
         let startRange = [dateRange[0], dateRange[1]];
         this.$emit("scrollHeaderIntoView")
         this.$emit("selectedDateRange", [dateRange, startRange]);
-        console.log("Recommended Range changed:", [dateRange, startRange]); 
       }
+    },
+    handleCustomInputRange(newCustomInputRange) {
+      this.customInputRange = newCustomInputRange;
     },
     toggleCustomSelector: function () {
       this.customSelectorOn = !this.customSelectorOn;
@@ -160,7 +174,7 @@ export default {
   },
   computed: {
     defaultMessage() {
-      return "Default: " + this.defaultRangeCustomSrt[0] + "~" + this.defaultRangeCustomSrt[1];
+      return "Default Date Range: ";
     }
   }
 }
