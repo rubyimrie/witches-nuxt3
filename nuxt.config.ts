@@ -36,7 +36,8 @@ plugins: [
   modules: [
       '@nuxtjs/tailwindcss',
       '@nuxtjs/leaflet',
-      '@vueform/nuxt'
+      '@vueform/nuxt',
+      'nuxt-font-loader'
       //'vue-sweetalert2/nuxt', NOT COMPATATIBLE WITH NUXT 3 YET
       // 'nuxt-webfontloader', NOT COMPATATIBLE WITH NUXT 3 YET
   ],
@@ -53,10 +54,19 @@ purgeCSS: {
       ,/vue-slider.+$/
   ]
 },
-webfontloader: {
-  google: {
-      families: ['EB+Garamond:400,700', 'Roboto:300,400,500'] //Loads Lato font with weights 400 and 700
-  }
+fontLoader: {
+  external: [
+    {
+      src: 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap',
+      family: 'Roboto',
+      weight: '300 400 500',
+    },
+    {
+      src: 'https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap',
+      family: 'EB Garamond',
+      weight: '400 700',
+    },
+  ]
 },
 /*
 ** Build configuration
