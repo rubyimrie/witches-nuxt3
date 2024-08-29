@@ -23,24 +23,17 @@ export default defineNuxtConfig({
   }
 },
 css: [
-  "leaflet.markercluster/dist/MarkerCluster.css",
-  "leaflet.markercluster/dist/MarkerCluster.Default.css"
+  
 ],
 plugins: [
-  {src: "~/plugins/markercluster",ssr: false},
   { src: "~/plugins/vue-gtag", mode: "client"},
 ],
   /*
   ** Nuxt.js modules
   */
-  modules: [
-      '@nuxtjs/tailwindcss',
-      '@nuxtjs/leaflet',
-      '@vueform/nuxt',
-      'nuxt-font-loader'
-      //'vue-sweetalert2/nuxt', NOT COMPATATIBLE WITH NUXT 3 YET
-      // 'nuxt-webfontloader', NOT COMPATATIBLE WITH NUXT 3 YET
-  ],
+  modules: ['@nuxtjs/tailwindcss', '@vueform/nuxt', //'vue-sweetalert2/nuxt', NOT COMPATATIBLE WITH NUXT 3 YET
+  // 'nuxt-webfontloader', NOT COMPATATIBLE WITH NUXT 3 YET
+  'nuxt-font-loader', '@nuxtjs/leaflet'],
   build: {
 },
 purgeCSS: {
