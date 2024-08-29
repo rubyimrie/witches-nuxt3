@@ -31,7 +31,7 @@
 
 <script>
  import ClustersMap from './ClustersMap.vue';
- import NormalMap from './NormalMap.client.vue';
+ import NormalMap from './NormalMap.vue';
 
  export default {
    components: { ClustersMap, NormalMap },
