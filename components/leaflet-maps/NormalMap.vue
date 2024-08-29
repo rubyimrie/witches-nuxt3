@@ -56,9 +56,6 @@
 
       <LIcon :icon-size="[25, 38]" :icon-anchor="iconAnchor" :iconUrl="marker.markerIcon" :shadowUrl="shadowUrl" :shadowSize="[25.6,17.6]" :shadowAnchor="shadowAnchor">
       </LIcon>
-      <div v-if="marker.witches.length > 1" class="icon-text">
-            {{marker.witches.length}}
-          </div>
 
     </LMarker>
   </LMap>
