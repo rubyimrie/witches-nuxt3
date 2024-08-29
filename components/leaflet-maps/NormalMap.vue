@@ -54,15 +54,11 @@
         </div>
       </LPopup>
 
-      <LIcon :icon-anchor="iconAnchor">
-        <div class="icon-wrapper">
-          <div v-if="marker.witches.length > 1" class="icon-text">
+      <LIcon :icon-size="[25, 38]" :icon-anchor="iconAnchor" :iconUrl="marker.markerIcon" :shadowUrl="shadowUrl" :shadowSize="[25.6,17.6]" :shadowAnchor="shadowAnchor">
+      </LIcon>
+      <div v-if="marker.witches.length > 1" class="icon-text">
             {{marker.witches.length}}
           </div>
-          <img :src="marker.markerIcon" class="zoomed-in-img" />
-          <img class="icon-shadow" :src="shadowUrl" />
-        </div>
-      </LIcon>
 
     </LMarker>
   </LMap>
@@ -182,6 +178,9 @@
    computed: {
      iconAnchor: function () {
        return [11, 41];
+     },
+     shadowAnchor: function () {
+       return [11, 26];
      },
      shadowUrl: function () {
        return '/images/North-Berwick-witch-shadow.png';
