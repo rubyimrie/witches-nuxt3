@@ -38,21 +38,21 @@ export default {
       $cookies.set("edW", 'yes');
       this.hideBanner = true;
 
-      if (process.browser) {
+      if (process.client) {//process.browser is depreceated
         this.isOpen = false;
         localStorage.setItem("GDPR:accepted", "yes");
-        this.$ga.enable();
-        this.$ga.page(this.$route.fullPath);
+        this.$gtag.optIn();
+        this.$gtag.pageview(this.$route.fullPath);
       }
     },
     rejectCookies: function () {
       $cookies.set("edW", 'yes');
       this.hideBanner = true;
 
-      if (process.browser) {
+      if (process.client) { //process.browser is depreceated
         this.isOpen = false;
         localStorage.setItem("GDPR:accepted", "no");
-        this.$ga.disable();
+        this.$gtag.optOut();
       }
     },
   },

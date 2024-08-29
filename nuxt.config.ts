@@ -28,7 +28,7 @@ css: [
 ],
 plugins: [
   {src: "~/plugins/markercluster",ssr: false},
-  { src: "~/plugins/vue-google-analytics", mode: "client"},
+  { src: "~/plugins/vue-gtag", mode: "client"},
 ],
   /*
   ** Nuxt.js modules
