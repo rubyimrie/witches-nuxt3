@@ -1,7 +1,7 @@
 <template>
   <div id="map-wrapper" class="w-full h-full">
     <!-- Leaflet map. -->
-    <no-ssr>
+    <client-only>
       <div id="map" class="w-full h-full relative">
         <!-- Clusters on-off button -->
         <div class="absolute flex justify-center w-100
@@ -17,7 +17,7 @@
           </label>
         </div>
 
-        <clusters-map v-if="clusterState.clustersOn" :mapMarkers="mapMarkers" 
+        <normal-map v-if="clusterState.clustersOn" :mapMarkers="mapMarkers" 
                       :mapUrl="mapUrl" :center="center"
                       :zoom="zoom" @changeMaps="changeMaps($event)" />
 
@@ -25,13 +25,13 @@
                     :mapUrl="mapUrl" :center="center"
                     :zoom="zoom" @changeMaps="changeMaps($event)" />
       </div>
-    </no-ssr>
+    </client-only>
   </div>
 </template>
 
 <script>
  import ClustersMap from './ClustersMap.vue';
- import NormalMap from './NormalMap.vue';
+ import NormalMap from './NormalMap.client.vue';
 
  export default {
    components: { ClustersMap, NormalMap },
