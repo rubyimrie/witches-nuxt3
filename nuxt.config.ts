@@ -46,12 +46,10 @@ plugins: [
 purgeCSS: {
   whitelist: ['lvml'],
   whitelistPatterns: [
-      /leaflet-.+$/,
-      /vue-slider.+$/
+      /leaflet-.+$/
   ],
   whitelistPatternsChildren: [
       /leaflet-.+$/
-      ,/vue-slider.+$/
   ]
 },
 fontLoader: {
