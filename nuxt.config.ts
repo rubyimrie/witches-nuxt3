@@ -27,9 +27,10 @@ css: [
 ],
 plugins: [
   { src: "~/plugins/vue-gtag", mode: "client"},
+  { src: "~/plugins/leaflet", mode: "client"},
 ],
   /*
-  ** Nuxt.js modules
+  ** Nuxt.js modules 
   */
   modules: ['@nuxtjs/tailwindcss', '@vueform/nuxt', //'vue-sweetalert2/nuxt', NOT COMPATATIBLE WITH NUXT 3 YET
   // 'nuxt-webfontloader', NOT COMPATATIBLE WITH NUXT 3 YET
