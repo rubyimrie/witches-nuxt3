@@ -32,7 +32,7 @@ plugins: [
   /*
   ** Nuxt.js modules 
   */
-  modules: ['@nuxtjs/tailwindcss', '@vueform/nuxt', //'vue-sweetalert2/nuxt', NOT COMPATATIBLE WITH NUXT 3 YET
+  modules: ['@nuxtjs/tailwindcss', //'vue-sweetalert2/nuxt', NOT COMPATATIBLE WITH NUXT 3 YET
   // 'nuxt-webfontloader', NOT COMPATATIBLE WITH NUXT 3 YET
   'nuxt-font-loader', '@nuxtjs/leaflet'],
   build: {

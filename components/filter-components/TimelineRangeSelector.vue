@@ -19,16 +19,11 @@
 
     <div class="ml-2 lg:ml-8 mt-2 flex mb-2"
          v-if="recommendedOn">
-         <Vueform>
-         <SelectElement 
-                  name="select"
-                  v-model="recommendedRange"
-                  :items="recommendedOptions"
-                  :native="true"
-                  @change="handleRecommendedRange"
-                  placeholder="(recommended ranges)"
-                   />
-          </Vueform>
+          <select v-model="recommendedRange"  class="h-8 border border-gray-300 rounded outline-none focus:ring-2 focus:ring-gray-400">
+            <option v-for="option in recommendedOptions" :value="option.value">
+              {{ option.label }}
+            </option>
+          </select>
     </div>
 
     <div class="flex pl-2 py-1 flex-wrap items-center mt-2
@@ -44,7 +39,7 @@
 
     <div v-if="customSelectorOn" 
          class="ml-2 lg:ml-8 mt-2 flex flex-col">
-         <Vueform>
+         <!-- <Vueform>
           <DatesElement name="dates"
           display-format="DD MMMM YYYY"
           v-model="customInputRange"
@@ -56,7 +51,7 @@
           load-format="DD-MM-YYYY"
           @change="handleCustomInputRange"
            />
-        </Vueform>
+        </Vueform> -->
     </div>
   </div>
 </template>
@@ -100,6 +95,7 @@ export default {
         new Date("1727-06-12T00:00:00.000Z")
       ],
       recommendedOptions: [
+      { value: null, label: "(recommended ranges)" },
       { value: 0, label: "1563-89 (non-panic period)" }, 
       { value: 1, label: "1590-91 (panic period)" },
       { value: 2, label: "1592-96 (non-panic period)" },
@@ -131,6 +127,18 @@ export default {
     }
   },
   watch: {
+    recommendedRange(newRecommendedRange, oldQuestion) {
+      if (newRecommendedRange !== null) {
+        let index = newRecommendedRange;
+        console.log("index", index)
+        let dateRange = this.panicsRanges[index];
+        console.log("dateRange", dateRange)
+        let startRange = [dateRange[0], dateRange[1]];
+        console.log("startRange", startRange)
+        this.$emit("scrollHeaderIntoView")
+        this.$emit("selectedDateRange", [dateRange, startRange]);
+      }
+    },
     customInputRange(newCustomInputRange) {
       console.log('New custom input range:', newCustomInputRange);
       if (newCustomInputRange && newCustomInputRange.length === 2) {
@@ -145,15 +153,6 @@ export default {
   methods: {
     getEnabledDateRange: function (date) {
       return date < this.fullRange[0] || date > this.fullRange[1]
-    },
-    handleRecommendedRange(newRecommendedRange) {
-      if (newRecommendedRange !== null) {
-        let value = newRecommendedRange;
-        let dateRange = this.panicsRanges[value];
-        let startRange = [dateRange[0], dateRange[1]];
-        this.$emit("scrollHeaderIntoView")
-        this.$emit("selectedDateRange", [dateRange, startRange]);
-      }
     },
     handleCustomInputRange(newCustomInputRange) {
       this.customInputRange = newCustomInputRange;
