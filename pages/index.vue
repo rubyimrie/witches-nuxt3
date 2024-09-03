@@ -19,6 +19,7 @@ import FilteringMethods from '~/assets/js/FilteringMethods';
 import json from '../big-query-output.json';
 import MapComponent from '../components/MapComponent.vue';
 import LoadingMessage from '../components/LoadingMessage.vue';
+import Swal from "sweetalert2";
 
 export default {
   components: {
