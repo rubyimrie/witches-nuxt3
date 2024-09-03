@@ -58,7 +58,7 @@
               </div>
 
               <!-- Display number of active witches. -->
-              <div class="ml-3 flex mt-3 items-center pb-2">
+              <div class="ml-3 flex mt-3 items-center pb-1">
                 <p class="mr-2 text-lg witchy-text">Showing</p>
                 <div
                   class="
@@ -82,7 +82,6 @@
                 </div>
                 <p class="mr-1 text-lg witchy-text">Accused Witches</p>
               </div>
-
               <div
                 class="ml-3 flex mt-1y items-center pb-2"
                 v-if="!iconsConstant"
@@ -260,12 +259,40 @@
                   items-center
                   mt-2
                   cursor-pointer
+                  w-full
                 "
-                style="width: 225px"
                 @click="togglePropertyShowing(property)"
               >
                 <div class="title-point"></div>
-                <p style="font-weight: 500">{{ propertyItem.label }}</p>
+                <!--Descriptions-->
+                <div class="tooltip">
+                  <span class="label-and-icon">
+                    <p style="font-weight: 500; display: inline">
+                      {{ propertyItem.label }}
+                    </p>
+                    <div
+                      class="
+                        inline-flex
+                        items-center
+                        justify-center
+                        align-middle
+                        rounded-full
+                        border-r-2 border-l-2 border-gray-400
+                        w-5
+                        h-5
+                      "
+                    >
+                      <img
+                        src="/images/infoIcon.svg"
+                        class="pt-0.5 h-5 inline"
+                      />
+                    </div>
+                  </span>
+                  <span class="tooltiptext text-xs">
+                    <h4 class="font-semibold">{{ propertyItem.label }}</h4>
+                    <div v-html="propertyItem.description"></div>
+                  </span>
+                </div>
                 <img
                   src="/images/arrow-down.svg"
                   v-if="!propertyItem.showing"
@@ -277,9 +304,29 @@
                   class="w-6 h-6"
                 />
               </div>
-
               <!-- Filters list if property is showing. -->
               <div v-if="propertyItem.showing" class="w-full">
+                <icon-dependent-filters-list
+                  v-if="!iconsConstant"
+                  :currentProperty="currentProperty"
+                  :property="property"
+                  :filterTypes="propertyItem.filters"
+                  :propertyLabel="propertyItem.label"
+                  @filterOff="emitFilterOff($event)"
+                  @filterOn="emitFilterOn($event)"
+                  @setPropertyToCurrent="setPropertyToCurrent($event)"
+                >
+                </icon-dependent-filters-list>
+
+                <normal-filters-list
+                  v-else
+                  :property="property"
+                  :filterTypes="propertyItem.filters"
+                  @filterOff="emitFilterOff($event)"
+                  @filterOn="emitFilterOn($event)"
+                >
+                </normal-filters-list>
+
                 <button
                   @click="selectAll(property, propertyItem)"
                   class="
@@ -287,7 +334,6 @@
                     rounded
                     hover:bg-gray-300
                     text-black
-                    font-bold
                     px-1
                     pb-1
                     pt-1
@@ -313,7 +359,6 @@
                     rounded
                     hover:bg-gray-300
                     text-black
-                    font-bold
                     px-1
                     pb-1
                     pt-1
@@ -332,27 +377,21 @@
                 >
                   Clear All
                 </button>
-                <icon-dependent-filters-list
-                  v-if="!iconsConstant"
-                  :currentProperty="currentProperty"
-                  :property="property"
-                  :filterTypes="propertyItem.filters"
-                  :propertyLabel="propertyItem.label"
-                  @filterOff="emitFilterOff($event)"
-                  @filterOn="emitFilterOn($event)"
-                  @setPropertyToCurrent="setPropertyToCurrent($event)"
-                >
-                </icon-dependent-filters-list>
-
-                <normal-filters-list
-                  v-else
-                  :property="property"
-                  :filterTypes="propertyItem.filters"
-                  @filterOff="emitFilterOff($event)"
-                  @filterOn="emitFilterOn($event)"
-                >
-                </normal-filters-list>
               </div>
+            </div>
+          </div>
+
+          <div
+            class="self-end flex flex-col mt-3 mr-3 h-full justify-end"
+            v-if="!iconsConstant"
+          >
+            <div class="flex items-center">
+              <p class="text-sm mr-0.5">-</p>
+              <img
+                class="witch-icon mb-1 ml-1"
+                src="public/images/witch-single-purple.png"
+              />
+              <p class="ml-1 text-sm">= Mixed.</p>
             </div>
           </div>
 
@@ -491,6 +530,7 @@ export default {
   },
   data() {
     return {
+      isTooltipVisible: false,
       timelineSelectorOn: false, // Set to true on mounted if includeTimeline.
       timelineSelectorKey: 0,
       filtersBox: true,
@@ -516,6 +556,14 @@ export default {
     };
   },
   methods: {
+    toggleTooltip: function (propertyItem) {
+      if (this.isMobileDevice) {
+        propertyItem.descriptionShowing = !propertyItem.descriptionShowing;
+      }
+    },
+    closeTooltip(propertyItem) {
+      propertyItem.descriptionShowing = false;
+    },
     setFilterInactive: function (property, filterType) {
       this.filterProperties[property].filters[filterType].active = false;
     },
@@ -636,6 +684,9 @@ export default {
     iconsConstant() {
       return this.iconBehaviour === "constant";
     },
+    isMobileDevice() {
+      return window.innerWidth <= 768; // You can adjust the width as needed
+    },
   },
   mounted: function () {
     if (this.includeTimeline) {
@@ -646,6 +697,63 @@ export default {
 </script>
 
 <style>
+.label-and-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 10%;
+  margin-left: -5px; /* Adjust based on the arrow's size */
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent rgb(223, 223, 223) transparent; /* Adjust the color as needed */
+}
+
+/*Links within the tooltip*/
+.tooltip a {
+  text-decoration: underline;
+  color: rgb(0, 123, 255);
+}
+
+.tooltip .tooltiptext {
+  display: none;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  max-width: 80%;
+  background-color: rgb(255, 255, 255);
+  color: #070707;
+  text-align: center;
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  display: block;
+}
+
+.label-and-icon:hover + .tooltiptext {
+  visibility: visible;
+}
+
+/*Tooltip stays when hovering over tooltip"*/
+.tooltip:hover .tooltiptext,
+.tooltip.active .tooltiptext {
+  visibility: visible;
+}
+
+.tooltip.active .tooltiptext {
+  display: block;
+}
+
 .arrow-container {
   border-radius: 50%;
 }
