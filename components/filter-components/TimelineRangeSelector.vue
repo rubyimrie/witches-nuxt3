@@ -41,7 +41,7 @@
          class="ml-2 lg:ml-8 mt-2 flex flex-col w-60" >
          <VueDatePicker v-model="customInputRange" range multi-calendars  :start-date="defaultRangeCustom[0]" position="left" 
          :teleport="true" class="custom-datepicker" focus-start-date :year-range="[1562, 1670]"  @update:model-value="handleCustomInputRange"
-         :enable-time-picker="false" placeholder="Select Custom Date Range"
+         :enable-time-picker="false" placeholder="Select Custom Date Range" format="dd/MM/yyyy"
          />
         </div>
         
