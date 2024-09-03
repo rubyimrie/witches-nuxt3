@@ -267,7 +267,7 @@
                 <!--Descriptions-->
                 <div class="tooltip">
                   <span class="label-and-icon">
-                    <p style="font-weight: 500; display: inline">
+                    <p style="font-weight: 500; display: inline" class="mr-1">
                       {{ propertyItem.label }}
                     </p>
                     <div
