@@ -248,6 +248,7 @@
  import IconDependentFiltersList from './IconDependentFiltersList.vue';
  import NormalFiltersList from './NormalFiltersList.vue';
  import TimelineMethods from '../../assets/js/TimelineMethods';
+ import Swal from 'sweetalert2'
 
  export default {
    components: { TimelineRangeSelector, IconDependentFiltersList, NormalFiltersList },
@@ -399,7 +400,7 @@
        this.$emit("deactivatedTimeline");
      },
      showPageInfo: function () {
-       this.$swal(this.pageInfo);
+       Swal.fire(this.pageInfo);
      },
      scrollHeaderIntoView() {
        const el = this.$refs.FiltersHeader;
@@ -495,5 +496,7 @@
      transform: translateX(0%);
    }
  }
+
+ 
 
 </style>
