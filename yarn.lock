@@ -4867,6 +4867,11 @@ svgo@^3.3.2:
     csso "^5.0.5"
     picocolors "^1.0.0"
 
+sweetalert2@^11.13.1:
+  version "11.13.1"
+  resolved "https://registry.npmjs.org/sweetalert2/-/sweetalert2-11.13.1.tgz"
+  integrity sha512-YO6StPWC+6WmXJbPDHIiOhi5ZNU9Lb2XnWo3odKGwbFOtfCOBqzExNcLK85HS2GzIMjpl8Wl6CLiMQdhRXHN0g==
+
 system-architecture@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/system-architecture/-/system-architecture-0.1.0.tgz"
