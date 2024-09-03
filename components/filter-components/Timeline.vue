@@ -15,7 +15,8 @@
         :max="max"
         :format="getDateLabel" 
         :merge="5"
-        @change="handleCustomInputRangeChange"/>
+        @change="handleCustomInputRangeChange"
+        :lazy="false"/>
     </div>  
   </div>
 </template>
