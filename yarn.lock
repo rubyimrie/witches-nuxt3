@@ -1116,6 +1116,18 @@
   resolved "https://registry.npmjs.org/@vue/shared/-/shared-3.4.35.tgz"
   integrity sha512-hvuhBYYDe+b1G8KHxsQ0diDqDMA8D9laxWZhNAjE83VZb5UDaXl9Xnz7cGdDSyiHM90qqI/CyGMcpBpiDy6VVQ==
 
+"@vueform/slider@^2.1.10":
+  version "2.1.10"
+  resolved "https://registry.npmjs.org/@vueform/slider/-/slider-2.1.10.tgz"
+  integrity sha512-L2G3Ju51Yq6yWF2wzYYsicUUaH56kL1QKGVtimUVHT1K1ADcRT94xVyIeJpS0klliVEeF6iMZFbdXtHq8AsDHw==
+
+"@vuepic/vue-datepicker@^9.0.2":
+  version "9.0.2"
+  resolved "https://registry.npmjs.org/@vuepic/vue-datepicker/-/vue-datepicker-9.0.2.tgz"
+  integrity sha512-VDAexzBJSvpErld1cZdGsBc+W/iU+Z+I98YNtEEboSSHUKHRi1s/h8s5D+wciZHLxgQ6P/tj6loNi4W7DgkYSQ==
+  dependencies:
+    date-fns "^3.6.0"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.npmjs.org/abbrev/-/abbrev-1.1.1.tgz"
@@ -1886,6 +1898,11 @@ csstype@^3.1.3:
   version "3.1.3"
   resolved "https://registry.npmjs.org/csstype/-/csstype-3.1.3.tgz"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
+
+date-fns@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.npmjs.org/date-fns/-/date-fns-3.6.0.tgz"
+  integrity sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==
 
 db0@^0.1.4:
   version "0.1.4"
@@ -5373,7 +5390,7 @@ vue-router@^4.4.0:
   dependencies:
     "@vue/devtools-api" "^6.6.3"
 
-"vue@^2.6.14 || ^3.3.0", "vue@^2.7.0 || ^3.2.25", vue@^3.0.0, "vue@^3.0.0-0 || ^2.6.0", vue@^3.0.0-rc.11, vue@^3.2.0, vue@^3.2.25, vue@^3.3.4, vue@^3.4.32, "vue@>=2.7 || >=3", vue@3.4.35, vue@latest:
+"vue@^2.6.14 || ^3.3.0", "vue@^2.7.0 || ^3.2.25", vue@^3.0.0, "vue@^3.0.0-0 || ^2.6.0", vue@^3.0.0-rc.11, vue@^3.2.0, vue@^3.2.25, vue@^3.3.4, vue@^3.4.32, "vue@>=2.7 || >=3", vue@>=3.2.0, vue@3.4.35, vue@latest:
   version "3.4.35"
   resolved "https://registry.npmjs.org/vue/-/vue-3.4.35.tgz"
   integrity sha512-+fl/GLmI4GPileHftVlCdB7fUL4aziPcqTudpTGXCT8s+iZWuOCeNEB5haX6Uz2IpRrbEXOgIFbe+XciCuGbNQ==

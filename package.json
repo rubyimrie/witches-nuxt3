@@ -13,6 +13,8 @@
     "@nuxtjs/leaflet": "^1.2.2",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@pinia/nuxt": "^0.5.3",
+    "@vueform/slider": "^2.1.10",
+    "@vuepic/vue-datepicker": "^9.0.2",
     "nuxt": "^3.12.4",
     "tailwindcss": "^3.4.10",
     "vue": "latest",
