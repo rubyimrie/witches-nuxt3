@@ -122,20 +122,16 @@ definePageMeta({
               ?item rdfs:label ?LabelEN filter (lang(?LabelEN) = "en") .
             }`;
 
-       const queryDispatcher = new SPARQLQueryDispatcher( this.sparqlUrl );
-       queryDispatcher.query( sparqlQuery ).then( result => {
-
+       const queryDispatcher = new SPARQLQueryDispatcher(this.sparqlUrl);
+       queryDispatcher.query(sparqlQuery).then(result => {
          for (let i = 0; i < result.results.bindings.length; i++) {
            let item = result.results.bindings[i];
-
            let wikiPage = {
              id: item.item.value,
              pageTitle: item.page_title.value,
-           }
-
+           };
            this.wikiPages.push(wikiPage);
          }
-
        });
     },
     setMarkersIcons: function () {
@@ -162,31 +158,44 @@ definePageMeta({
       this.filterProperties.occupation.filters = allFilters.occupation;
     },
     loadData: async function () {
-      this.loadWikiEntries();
-      const icons = this.icons;
+  this.loadWikiEntries();
+  const icons = this.icons;
 
-      try {
-        let response = await useMyFetch('/main.php?type=death')
-        this.queryOutput = response.data
-      } catch (e) {
-        Swal.fire({
-          title: 'Server Error',
-          html: '<div>We are unable to connect to the server to pull in map info. Please refresh the page and try again. If this error persists, please contact <a href="mailto:ltw-apps-dev.ed.ac.uk">ltw-apps-dev.ed.ac.uk</a></div>',
-          footer: 'witches.is.ed.ac.uk',
-          confirmButtonText: 'Close',
-          type: 'error',
-          showCloseButton: true,
-        });
+  try {
+    // Fetch the data from API
+    let response = await $fetch('https://witches.is.ed.ac.uk/main.php?type=death');
 
-        return
-      }
+    // Log the full response for debugging
+    console.log('API Response:', response);
 
-      let getData = new APIDataHandler(
-        this.queryOutput, this.wikiPages,
-        icons, null
-      );
-      let filtersFound = null;
+    // Validate the response structure
+    if (response && response.head && response.results && Array.isArray(response.results.bindings)) {
+      this.queryOutput = response;
+    } else {
+      throw new Error("Invalid API response: No valid results found");
+    }
+  } catch (e) {
+    console.error("API Fetch Error: ", e); // Log any fetching errors
+    Swal.fire({
+      title: 'Data Fetch Error',
+      text: 'There was an error fetching the data. Please try again later.',
+      footer: 'witches.is.ed.ac.uk',
+      confirmButtonText: 'Close',
+      icon: 'error',
+      showCloseButton: true,
+    });
+    return;
+  }
 
+  // Proceed if data is valid
+  if (this.queryOutput && this.queryOutput.results && Array.isArray(this.queryOutput.results.bindings)) {
+    let getData = new APIDataHandler(
+      this.queryOutput, this.wikiPages,
+      icons, null
+    );
+    let filtersFound = null;
+
+    try {
       [
         this.originalMarkers,
         filtersFound
@@ -194,18 +203,26 @@ definePageMeta({
 
       this.filterProperties.socialClass.filters = filtersFound.socialClass;
       this.filterProperties.occupation.filters = filtersFound.occupation;
-
-      this.setMarkersIcons();
-      this.loading = false;
+    } catch (err) {
+      console.error('Error processing data in loadAccussed:', err); // Debug here
+      return;
     }
+
+    this.setMarkersIcons();
+    this.loading = false;
+  } else {
+    console.error("Query Output is invalid or missing 'results' property", this.queryOutput); // Debug here
+  }
+}
+
+
+
   },
   mounted: function () {
     this.loadData();
   }
-   
- };
+};
 </script>
 
 <style>
 </style>
-
