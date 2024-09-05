@@ -23,7 +23,15 @@
         <br>
         <h2>Year: {{ sliderYear[0] }} - {{ sliderYear[1] }}</h2>
         <div class="p-2">
-          <vue-slider v-model="sliderYear" :adsorb="false" :data="sliderYears" :marks="true" @change="filterDates()"></vue-slider>
+          <!-- <vue-slider v-model="sliderYear" :adsorb="false" :data="sliderYears" :marks="true" @change="filterDates()"></vue-slider> -->
+          <Slider name="slider"
+            v-model="numberRangeValue"
+            :min="0"
+            :max="8"
+            :format="getYearLabel" 
+            :merge="1"
+            @change="filterDates()"
+            :lazy="false"/>
         </div>
         <br><br>
       </div>
@@ -60,6 +68,7 @@
 
  import {SPARQLQueryDispatcher} from '~/assets/js/SPARQLQueryDispatcher';
  import Swal from 'sweetalert2';
+ import Slider from '@vueform/slider'
 
 definePageMeta({
    layout: 'default'
@@ -67,6 +76,7 @@ definePageMeta({
 
 
  export default {
+  components: { Slider },
    data: () => ({
      sparqlUrl: 'https://query.wikidata.org/sparql',
      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -80,7 +90,13 @@ definePageMeta({
      sliderYear: [1550, 1750],
      sliderYears: [1550, 1575, 1600, 1625, 1650, 1675, 1700, 1725, 1750],
      noItems: '',
+     numberRangeValue: [0, 8]
    }),
+   computed: {
+    max() {
+      return this.sliderYears.length - 1;
+    }
+  },
    methods: {
      convertPointToLongLatArray: function(pointString) {
        pointString = pointString.substr(6);
@@ -90,6 +106,9 @@ definePageMeta({
        return longLatArray;
 
      },
+     getYearLabel(value) {
+      return this.sliderYears[value];
+    },
      loadTrials : function() {
        const sparqlQuery = `SELECT ?item ?residenceLabel ?coords ?personLabel ?date ?link
             WHERE
@@ -164,9 +183,10 @@ definePageMeta({
      },
      filterDates : function(){
        let markers = JSON.parse(JSON.stringify(this.originalMarkers));
+       console.log( this.sliderYears[this.numberRangeValue[0]] , this.sliderYears[this.numberRangeValue[1]])
 
        markers.forEach(marker => {
-         marker.trials = marker.trials.filter(trial => trial.year >= this.sliderYear[0] && trial.year <= this.sliderYear[1]);
+         marker.trials = marker.trials.filter(trial => trial.year >= this.sliderYears[this.numberRangeValue[0]] && trial.year <= this.sliderYears[this.numberRangeValue[1]] );
        });
 
        this.markers = markers;
