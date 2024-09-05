@@ -16,22 +16,26 @@
         </div>
         <div>
           <br>
-          <span v-for="(tile, index) in tiles">
+          <span v-for="(tile, index) in tiles" :key="index">
             <input type="radio" name="tile" :checked="tile.name === currentTileName" @change="filterTiles(tile)"/>&nbsp;{{tile.name}}&nbsp;
           </span>
         </div>
         <br>
         <h2>Year: {{ sliderYear[0] }} - {{ sliderYear[1] }}</h2>
         <div class="p-2">
-          <!-- <vue-slider v-model="sliderYear" :adsorb="false" :data="sliderYears" :marks="true" @change="filterDates()"></vue-slider> -->
           <Slider name="slider"
             v-model="numberRangeValue"
             :min="0"
             :max="8"
             :format="getYearLabel" 
+            showTooltip="drag"
             :merge="1"
             @change="filterDates()"
             :lazy="false"/>
+        </div>
+        <!-- Display slider years below the slider -->
+        <div class="slider-years">
+          <span v-for="(year, index) in sliderYears" :key="index" class="slider-year">{{ year }}</span>
         </div>
         <br><br>
       </div>
@@ -41,11 +45,12 @@
             <LTileLayer :url="url" :attribution="attribution"></LTileLayer>
 
             <LMarker v-for="(marker, index) in activeMarkers"
+                      :key="index"
                       :lat-lng="marker.longLat">
               <LPopup class="adapted-popup">
                 <h2>{{marker.location}}</h2><br>
                 <div :class="marker.trials.length > 1 ? 'witch-scroller' : 'no-witch-scroller'">
-                  <div v-for="(trial, index) in marker.trials">
+                  <div v-for="(trial, index) in marker.trials" :key="index">
                     <strong>{{ trial.witchName }}</strong><br>
                     Trial Date: {{ trial.date }}<br>
                     Trial Year: {{ trial.year }}<br>
@@ -56,7 +61,6 @@
               <LIcon :icon-size="[25, 38]" :icon-anchor="iconAnchor" :iconUrl="getIcon(marker)" :shadowUrl="shadowUrl" :shadowSize="[32,22]" :shadowAnchor="shadowAnchor">
               </LIcon>
             </LMarker>
-
           </LMap>
         </client-only>
       </div>
@@ -225,6 +229,17 @@ definePageMeta({
 </script>
 
 <style>
+
+.slider-years {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5px;
+}
+
+.slider-year {
+  font-size: 14px;
+  color: #606F7B;
+}
  .zoomed-in-img {
    float: left;
    width: 25px;
