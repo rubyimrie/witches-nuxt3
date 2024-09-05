@@ -169,7 +169,7 @@ definePageMeta({
     console.log('API Response:', response);
 
   } catch (e) {
-    this.$swal({
+    Swal.fire({
           title: 'Server Error',
           html: '<div>We are unable to connect to the server to pull in map info. Please refresh the page and try again. If this error persists, please contact <a href="mailto:ltw-apps-dev.ed.ac.uk">ltw-apps-dev.ed.ac.uk</a></div>',
           footer: 'witches.is.ed.ac.uk',
