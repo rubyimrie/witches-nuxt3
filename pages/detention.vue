@@ -20,6 +20,10 @@
  import LoadingMessage from '../components/LoadingMessage.vue';
  import Swal from "sweetalert2";
 
+ definePageMeta({
+   layout: 'default'
+ })
+
  export default {
    components: { MapComponent, LoadingMessage },
    data: () => ({
