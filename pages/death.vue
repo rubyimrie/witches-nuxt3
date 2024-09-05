@@ -168,26 +168,19 @@ definePageMeta({
     // Log the full response for debugging
     console.log('API Response:', response);
 
-    // Validate the response structure
-    if (response && response.head && response.results && Array.isArray(response.results.bindings)) {
-      this.queryOutput = response;
-    } else {
-      throw new Error("Invalid API response: No valid results found");
-    }
   } catch (e) {
-    console.error("API Fetch Error: ", e); // Log any fetching errors
-    Swal.fire({
-      title: 'Data Fetch Error',
-      text: 'There was an error fetching the data. Please try again later.',
-      footer: 'witches.is.ed.ac.uk',
-      confirmButtonText: 'Close',
-      icon: 'error',
-      showCloseButton: true,
+    this.$swal({
+          title: 'Server Error',
+          html: '<div>We are unable to connect to the server to pull in map info. Please refresh the page and try again. If this error persists, please contact <a href="mailto:ltw-apps-dev.ed.ac.uk">ltw-apps-dev.ed.ac.uk</a></div>',
+          footer: 'witches.is.ed.ac.uk',
+          confirmButtonText: 'Close',
+          type: 'error',
+          showCloseButton: true,
     });
     return;
   }
 
-  // Proceed if data is valid
+  // check data is valid
   if (this.queryOutput && this.queryOutput.results && Array.isArray(this.queryOutput.results.bindings)) {
     let getData = new APIDataHandler(
       this.queryOutput, this.wikiPages,
@@ -204,14 +197,14 @@ definePageMeta({
       this.filterProperties.socialClass.filters = filtersFound.socialClass;
       this.filterProperties.occupation.filters = filtersFound.occupation;
     } catch (err) {
-      console.error('Error processing data in loadAccussed:', err); // Debug here
+      console.error('Error processing data in loadAccussed:', err); // Debuging
       return;
     }
 
     this.setMarkersIcons();
     this.loading = false;
   } else {
-    console.error("Query Output is invalid or missing 'results' property", this.queryOutput); // Debug here
+    console.error("Query Output is invalid or missing 'results' property", this.queryOutput); //Debugging
   }
 }
 
