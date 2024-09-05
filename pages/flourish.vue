@@ -21,6 +21,9 @@
 <script>
 import Swal from 'sweetalert2'
 
+definePageMeta({
+   layout: 'default'
+ })
  export default {
    data: () => ({
 
@@ -42,7 +45,6 @@ import Swal from 'sweetalert2'
    },
    mounted: function() {
    },
-   layout: 'basic'
  };
 
 </script>
