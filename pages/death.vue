@@ -21,10 +21,6 @@
  import LoadingMessage from '../components/LoadingMessage.vue';
  import Swal from "sweetalert2";
 
-definePageMeta({
-   layout: 'default'
- })
-
  export default {
    components: { MapComponent, LoadingMessage },
    data: () => ({
@@ -107,8 +103,8 @@ definePageMeta({
        }
      }
    }),
-   computed: {
-    icons() {
+   computed:{
+   icons() {
       const { icons } = useIcons();
       return icons.value;
     }
@@ -122,16 +118,20 @@ definePageMeta({
               ?item rdfs:label ?LabelEN filter (lang(?LabelEN) = "en") .
             }`;
 
-       const queryDispatcher = new SPARQLQueryDispatcher(this.sparqlUrl);
-       queryDispatcher.query(sparqlQuery).then(result => {
+       const queryDispatcher = new SPARQLQueryDispatcher( this.sparqlUrl );
+       queryDispatcher.query( sparqlQuery ).then( result => {
+
          for (let i = 0; i < result.results.bindings.length; i++) {
            let item = result.results.bindings[i];
+
            let wikiPage = {
              id: item.item.value,
              pageTitle: item.page_title.value,
-           };
+           }
+
            this.wikiPages.push(wikiPage);
          }
+
        });
     },
     setMarkersIcons: function () {
@@ -158,18 +158,15 @@ definePageMeta({
       this.filterProperties.occupation.filters = allFilters.occupation;
     },
     loadData: async function () {
-  this.loadWikiEntries();
-  const icons = this.icons;
+      this.loadWikiEntries();
+      const icons = this.icons;
 
-  try {
-    // Fetch the data from API
-    let response = await useMyFetch('s/main.php?type=death');
-
-    // Log the full response for debugging
-    console.log('API Response:', response);
-
-  } catch (e) {
-    Swal.fire({
+      try {
+        let response = await myFetch('/main.php?type=death')
+        console.log('API Response:', response);
+        this.queryOutput = response
+      } catch (e) {
+        Swal.fire({
           title: 'Server Error',
           html: '<div>We are unable to connect to the server to pull in map info. Please refresh the page and try again. If this error persists, please contact <a href="mailto:ltw-apps-dev.ed.ac.uk">ltw-apps-dev.ed.ac.uk</a></div>',
           footer: 'witches.is.ed.ac.uk',
@@ -177,18 +174,16 @@ definePageMeta({
           type: 'error',
           showCloseButton: true,
     });
-    return;
-  }
 
-  // check data is valid
-  if (this.queryOutput && this.queryOutput.results && Array.isArray(this.queryOutput.results.bindings)) {
-    let getData = new APIDataHandler(
-      this.queryOutput, this.wikiPages,
-      icons, null
-    );
-    let filtersFound = null;
+        return
+      }
 
-    try {
+      let getData = new APIDataHandler(
+        this.queryOutput, this.wikiPages,
+        icons, null
+      );
+      let filtersFound = null;
+
       [
         this.originalMarkers,
         filtersFound
@@ -196,26 +191,18 @@ definePageMeta({
 
       this.filterProperties.socialClass.filters = filtersFound.socialClass;
       this.filterProperties.occupation.filters = filtersFound.occupation;
-    } catch (err) {
-      console.error('Error processing data in loadAccussed:', err); // Debuging
-      return;
+
+      this.setMarkersIcons();
+      this.loading = false;
     }
-
-    this.setMarkersIcons();
-    this.loading = false;
-  } else {
-    console.error("Query Output is invalid or missing 'results' property", this.queryOutput); //Debugging
-  }
-}
-
-
-
   },
   mounted: function () {
     this.loadData();
   }
-};
+   
+ };
 </script>
 
 <style>
 </style>
+
