@@ -20,7 +20,6 @@ import MapComponent from "../components/MapComponent.vue";
 import LoadingMessage from "../components/LoadingMessage.vue";
 import Swal from "sweetalert2";
 
-
 export default {
   components: { MapComponent, LoadingMessage },
   data: () => ({
@@ -102,8 +101,13 @@ export default {
       });
     },
     setFilters: function (filtersFound) {
-      this.filtersToFind.forEach(([filterName]) => {
-        this.filterProperties[filterName].filters = filtersFound[filterName];
+      // Using a function in this page instead of just
+      // assigning manually like in the other pages because
+      // there are 6 of them.
+
+      this.filtersToFind.map((filterProperty) => {
+        this.filterProperties[filterProperty[0]].filters =
+          filtersFound[filterProperty[0]];
       });
     },
     // Local storage functions:
@@ -115,23 +119,27 @@ export default {
       return setupTime === null || now - setupTime > hours * 60 * 60 * 1000;
     },
     loadDataFromLocalStorage: function () {
-      this.originalMarkers = JSON.parse(localStorage.getItem("residenceMarkers"));
+      this.originalMarkers = JSON.parse(
+        localStorage.getItem("residenceMarkers")
+      );
       let allFilters = JSON.parse(localStorage.getItem("allFilters"));
       this.setFilters(allFilters);
       this.setMarkersIcons();
+      console.log(this.filterProperties);
     },
     setMarkersIcons: function () {
-      this.originalMarkers.forEach((marker) => {
+      for (let i = 0; i < this.originalMarkers.length; i++) {
+        let marker = this.originalMarkers[i];
         marker.markerIcon = "/images/witch-single-orange.png";
-      });
+      }
     },
     loadData: async function () {
       this.loadWikiEntries();
       let icon = "/images/witch-single-orange.png";
 
       try {
-        let response = await useMyFetch("/main.php?type=meetings");
-        console.log('API Response:', response);
+        let response = await myFetch("/main.php?type=meetings");
+        this.queryOutput = response;
       } catch (e) {
         Swal.fire({
           title: "Server Error",
@@ -141,39 +149,33 @@ export default {
           type: "error",
           showCloseButton: true,
         });
+
         return;
       }
 
-      if (this.queryOutput && this.queryOutput.results && Array.isArray(this.queryOutput.results.bindings)) {
-    let getData = new APIDataHandler(
-      this.queryOutput,
+      let getData = new APIDataHandler(
+        this.queryOutput,
         this.wikiPages,
         null,
         icon
-    );
-    let filtersFound = null;
+      );
+      let filtersFound = null;
 
-    try {
-      [
-        this.originalMarkers,
-        filtersFound
-      ] = getData.loadAccussed('residence', this.filtersToFind);
+      [this.originalMarkers, filtersFound] = getData.loadAccussed(
+        "residence",
+        this.filtersToFind
+      );
 
       this.setFilters(filtersFound);
-    } catch (err) {
-      console.error('Error processing data in loadAccussed:', err); // Debuging
-      return;
-    }
-    this.setMarkersIcons();
-    this.loading = false;
-    }
-  }
+      this.setMarkersIcons();
+      this.loading = false;
+    },
   },
 
   mounted: function () {
     this.loadData();
-  }
-}
+  },
+};
 </script>
 
 <style></style>

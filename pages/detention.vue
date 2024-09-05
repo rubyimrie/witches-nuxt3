@@ -18,6 +18,7 @@
  import FilteringMethods from '../assets/js/FilteringMethods';
  import MapComponent from '../components/MapComponent.vue';
  import LoadingMessage from '../components/LoadingMessage.vue';
+ import Swal from "sweetalert2";
 
  export default {
    components: { MapComponent, LoadingMessage },
@@ -100,6 +101,12 @@
        }
      }
    }),
+   computed:{
+   icons() {
+      const { icons } = useIcons();
+      return icons.value;
+    }
+  },
    methods: {
      loadWikiEntries: function () {
        const sparqlQuery = `SELECT DISTINCT ?item ?LabelEN ?page_title
@@ -150,13 +157,14 @@
      },
      loadData: async function () {
        this.loadWikiEntries();
-       let icons = this.$store.getters['icons/getIcons'];
+       const icons = this.icons;
 
        try {
-         let response = await this.$axios.get('/main.php?type=detention')
-         this.queryOutput = response.data
+         let response = await myFetch('/main.php?type=detention')
+         console.log('API Response:', response);
+         this.queryOutput = response
        } catch (e) {
-         this.$swal({
+         Swal.fire({
            title: 'Server Error',
            html: '<div>We are unable to connect to the server to pull in map info. Please refresh the page and try again. If this error persists, please contact <a href="mailto:ltw-apps-dev.ed.ac.uk">ltw-apps-dev.ed.ac.uk</a></div>',
            footer: 'witches.is.ed.ac.uk',
