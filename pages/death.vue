@@ -163,7 +163,7 @@ definePageMeta({
 
   try {
     // Fetch the data from API
-    let response = await $fetch('https://witches.is.ed.ac.uk/main.php?type=death');
+    let response = await useMyFetch('s/main.php?type=death');
 
     // Log the full response for debugging
     console.log('API Response:', response);
