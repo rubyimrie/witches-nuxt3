@@ -1,84 +1,22 @@
 <template>
-  <l-map class="w-full h-full z-0 absolute" :zoom="zoom" :center="center" 
-         :options="{zoomControl: false}" ref="myMap">
+  <LMap class="w-full h-full z-0 absolute" :zoom="zoom" :center="center" 
+         :options="{zoomControl: false}" ref="myMap"
+         :use-global-leaflet="true"
+         @ready="onMapReady">
 
-    <l-control-zoom position="bottomright"></l-control-zoom>
-    <l-tile-layer :url="baseMapUrl" :attribution="attribution"></l-tile-layer>
+    <LControlZoom position="bottomright"></LControlZoom>
+    <LTileLayer :url="baseMapUrl" :attribution="attribution"></LTileLayer>
     
     <!--historic layer-->
     <div v-if="mapUrl.startsWith('https://mapseries')">
-      <l-tile-layer :url="mapUrl" :attribution="attribution"></l-tile-layer>
+      <LTileLayer :url="mapUrl" :attribution="attribution"></LTileLayer>
     </div>
-
-    <!--markers-->
-    <v-marker-cluster ref="clusterRef" :options="clusterOptions">
-      
-      <l-marker v-for="(marker, index) in mapMarkers" :key="index" :lat-lng="marker.longLat">
-        <l-popup class="adapted-popup">
-          <h2>{{marker.location}}</h2><br>
-          <div :class="marker.witches.length > 1 ? 'witch-scroller' : 'no-witch-scroller'">
-            <div v-for="(witch, index) in marker.witches" :key="index">
-
-              <div class="font-semibold text-base">{{ witch.name }}</div><br>
-              <div>
-                <b>Investigation Date:</b> {{ witch.investigationDates[1] }}<br>
-              </div>
-
-              <div v-for="standardAttribute in getStandardAttributesWithValue(witch)">
-                <b>{{standardAttributeLabels[standardAttribute]}}:</b>
-                {{ witch[standardAttribute] }}
-                <br>
-              </div>
-
-              <div v-for="locationOption in getLocationsWithValue(witch)">
-                <b>{{locationsLabels[locationOption]}}:</b>
-                  <template v-for="(subLocation, index) in witch[locationOption].locations">
-                    <a @click="flyTo(witch[locationOption].coordinates[index])" :style="{ cursor: 'pointer'}">{{ subLocation }}
-                    </a>
-                    <template v-if="index < witch[locationOption].locations.length - 1">, </template>
-                  </template>
-                <br>
-              </div>
-
-              
-
-              <div v-for="optionalAttribute in getOptionalsWithValue(witch)">
-                <b>{{optionalsLabels[optionalAttribute]}}:</b>
-                <template v-for="(subAtribute, index) in witch[optionalAttribute]">
-                   {{ subAtribute.toLowerCase() }}<template v-if="index < witch[optionalAttribute].length - 1">,</template>
-                </template>
-                <br>
-              </div>
-
-              <div v-if="witch.mannerOfDeath !== ''">
-                <b>Manner of Death:</b> {{ witch.mannerOfDeath }}<br>
-              </div>
-              <div v-if="witch.wikiPage !== ''">
-                <a :href="witch.wikiPage" target="_blank">
-                  View Wiki Page
-                </a><br>
-              </div>
-              <a :href="witch.link" target="_blank">More Info</a><br><br>
-            </div>
-          </div>
-        </l-popup>
-
-        <l-icon :icon-anchor="iconAnchor">
-          <div class="icon-wrapper">
-            <div v-if="marker.witches.length > 1" class="icon-text">
-              {{marker.witches.length}}
-            </div>
-            <img :src="marker.markerIcon" class="zoomed-in-img" />
-            <img class="icon-shadow" :src="shadowUrl" />
-          </div>
-        </l-icon>
-
-      </l-marker>
-    </v-marker-cluster>
-  </l-map>
+    
+  </LMap>
 </template>
 
 <script>
+
  export default {
    props: {
      mapMarkers: {
@@ -102,6 +40,7 @@
      return {
        baseMapUrl: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
        attribution: 'Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>. Historical Maps Layer, James Dorret 1750 from the <a href="https://maps.nls.uk/geo/explore/#zoom=6.6&lat=57.29330&lon=-5.04553&layers=125140579&b=1">NLS Maps API</a>',
+       markers: [],
        clusterOptions: {
          iconCreateFunction: function (cluster) {
            var iconHtml = '<img class="cluster-img" src="/images/witches-cluster-composite-yellow.png">';
@@ -141,6 +80,64 @@
      }
    },
    methods: {
+    fillMarkersArray(mapMarkers) {
+      this.markers = mapMarkers.map((markerData) => {
+        const lat = markerData.longLat[0];
+        const lng = markerData.longLat[1];
+
+        // Building the popup content as an HTML string
+        const popupContent = `
+          <h2>${markerData.location}</h2><br>
+          <div class="${markerData.witches.length > 1 ? 'witch-scroller' : 'no-witch-scroller'}">
+            ${markerData.witches.map((witch) => `
+              <div class="font-semibold text-base">${witch.name}</div><br>
+              <div><b>Investigation Date:</b> ${witch.investigationDates[1]}</div>
+              ${this.getStandardAttributesWithValue(witch).map((attr) => `
+                <b>${this.standardAttributeLabels[attr]}:</b> ${witch[attr]}<br>
+              `).join('')}
+              ${this.getLocationsWithValue(witch).map((locationOption) => `
+                <b>${this.locationsLabels[locationOption]}:</b> 
+                ${witch[locationOption].locations.map((subLocation, index) => `
+                  <a href="#" @click="flyTo(${witch[locationOption].coordinates[index]})">${subLocation}</a>
+                `).join(', ')}<br>
+              `).join('')}
+              ${this.getOptionalsWithValue(witch).map((optionalAttribute) => `
+                <b>${this.optionalsLabels[optionalAttribute]}:</b> 
+                ${witch[optionalAttribute].join(', ')}<br>
+              `).join('')}
+              ${witch.mannerOfDeath ? `<b>Manner of Death:</b> ${witch.mannerOfDeath}<br>` : ''}
+              ${witch.wikiPage ? `<a href="${witch.wikiPage}" target="_blank">View Wiki Page</a><br>` : ''}
+              <a href="${witch.link}" target="_blank">More Info</a><br><br>
+            `).join('')}
+          </div>`;
+
+        // Return the formatted marker object
+        return {
+          lat: lat,
+          lng: lng,
+          options: {
+            icon: L.icon({
+              iconUrl: markerData.markerIcon,
+              iconSize: [25, 38],
+              iconAnchor: [12, 41],
+              shadowUrl: this.shadowUrl,
+              shadowSize: [41, 41],
+              shadowAnchor: [12, 41]
+            }),
+              iconCreateFunction: (cluster) => {
+                return L.divIcon({
+                  html: `<img class="cluster-img" src="/images/witches-cluster-composite-yellow.png">`,
+                  className: 'mycluster',
+                  iconSize: [40, 40]
+                });
+              },
+              disableClusteringAtZoom: 12,
+              spiderfyOnMaxZoom: true
+          },
+          popup: popupContent
+        };
+      });
+    },
      hasWikiEntry: function (marker){
        let witchesWithEntry = marker.witches.filter( witch => witch.wikiPage !== '');
        return witchesWithEntry.length > 0;
@@ -195,11 +192,23 @@
        })
 
        return optionalsWithValue
-     }
+     },
+     onMapReady() {
+      console.log("Markers:", this.mapMarkers )
+      this.fillMarkersArray(this.mapMarkers);
+      console.log("Locations:", this.markers )
+      useLMarkerCluster({
+        leafletObject: this.$refs.myMap.leafletObject,
+        markers: this.markers
+      });
+    },
    },
    computed: {
      iconAnchor : function () {
        return [11, 41];
+     },
+     shadowAnchor: function () {
+       return [11, 26];
      },
      shadowUrl : function () {
        return '/images/North-Berwick-witch-shadow.png';

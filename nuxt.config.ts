@@ -32,9 +32,13 @@ plugins: [
   /*
   ** Nuxt.js modules 
   */
-  modules: ['@nuxtjs/tailwindcss', //'vue-sweetalert2/nuxt', NOT COMPATATIBLE WITH NUXT 3 YET
-  // 'nuxt-webfontloader', NOT COMPATATIBLE WITH NUXT 3 YET
-  'nuxt-font-loader', '@nuxtjs/leaflet'],
+  modules: ['@nuxtjs/tailwindcss', 
+  'nuxt-font-loader',
+  '@nuxtjs/leaflet',
+],
+leaflet: {
+  markerCluster: true
+},
   build: {
     transpile: ['@vuepic/vue-datepicker']
 },

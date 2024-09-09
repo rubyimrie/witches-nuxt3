@@ -17,7 +17,7 @@
           </label>
         </div>
 
-        <normal-map v-if="clusterState.clustersOn" :mapMarkers="mapMarkers" 
+        <clusters-map v-if="clusterState.clustersOn" :mapMarkers="mapMarkers" 
                       :mapUrl="mapUrl" :center="center"
                       :zoom="zoom" @changeMaps="changeMaps($event)" />
 
