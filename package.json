@@ -1,7 +1,9 @@
 {
-  "name": "nuxt-app",
-  "private": true,
-  "type": "module",
+  "name": "witches",
+  "description": "Witches",
+  "author": "DLAM Applications Development Team, University of Edinburgh",
+  "private": false,
+  "homepage": "https://github.com/uoe-dlam/witches",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
