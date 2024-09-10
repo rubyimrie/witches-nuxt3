@@ -124,15 +124,6 @@
               shadowSize: [41, 41],
               shadowAnchor: [12, 41]
             }),
-              iconCreateFunction: (cluster) => {
-                return L.divIcon({
-                  html: `<img class="cluster-img" src="/images/witches-cluster-composite-yellow.png">`,
-                  className: 'mycluster',
-                  iconSize: [40, 40]
-                });
-              },
-              disableClusteringAtZoom: 12,
-              spiderfyOnMaxZoom: true
           },
           popup: popupContent
         };
@@ -194,12 +185,11 @@
        return optionalsWithValue
      },
      onMapReady() {
-      console.log("Markers:", this.mapMarkers )
       this.fillMarkersArray(this.mapMarkers);
-      console.log("Locations:", this.markers )
-      useLMarkerCluster({
+      useLMarkerClusterCustom({
         leafletObject: this.$refs.myMap.leafletObject,
-        markers: this.markers
+        markers: this.markers,
+        clusterOptions: this.clusterOptions
       });
     },
    },
