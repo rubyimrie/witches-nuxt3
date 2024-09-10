@@ -237,9 +237,9 @@
        this.timelineRangeStart = startRange;
        this.filterByDateRange(startRange);
 
-      //  if (this.clustersOn) {
-      //    this.clustersOn = !this.clustersOn; //ADD BACK IN IF GET CLUSTERS MAP WORKING
-      //  }
+       if (this.clustersOn) {
+         this.clustersOn = !this.clustersOn; 
+       }
        // setting the dates and markes for the timeline.
        this.resetTimelineWithNewRange(dateRange);
 
