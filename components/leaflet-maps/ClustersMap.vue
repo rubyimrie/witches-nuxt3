@@ -200,7 +200,7 @@
        return [11, 41];
      },
      shadowAnchor: function () {
-       return [11, 26];
+       return [-4, 41];
      },
      shadowUrl : function () {
        return '/images/North-Berwick-witch-shadow.png';
@@ -219,18 +219,5 @@
    height: 55px;
  }
 
- .zoomed-in-img {
-   float: left;
-   width: 25px;
-   height: 38px;
- }
-
- .icon-shadow {
-   position: absolute;
-   top: 15px !important;
-   left: 0;
-   z-index: -1;
-   width: 25.6px;
-   height: 17.6px !important;
- }
+ 
 </style>
