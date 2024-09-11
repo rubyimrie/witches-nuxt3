@@ -121,7 +121,7 @@
               iconSize: [25, 38],
               iconAnchor: this.iconAnchor,
               shadowUrl: this.shadowUrl,
-              shadowSize: [41, 41],
+              shadowSize: [25.6, 17.6],
               shadowAnchor: this.shadowAnchor
             }),
           },
