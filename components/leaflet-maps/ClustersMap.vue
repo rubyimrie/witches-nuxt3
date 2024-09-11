@@ -119,10 +119,10 @@
             icon: L.icon({
               iconUrl: markerData.markerIcon,
               iconSize: [25, 38],
-              iconAnchor: [12, 41],
+              iconAnchor: this,iconAnchor,
               shadowUrl: this.shadowUrl,
               shadowSize: [41, 41],
-              shadowAnchor: [12, 41]
+              shadowAnchor: this.shadowAnchor
             }),
           },
           popup: popupContent
