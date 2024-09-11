@@ -98,7 +98,7 @@
               ${this.getLocationsWithValue(witch).map((locationOption) => `
                 <b>${this.locationsLabels[locationOption]}:</b> 
                 ${witch[locationOption].locations.map((subLocation, index) => `
-                  <a href="#" @click="flyTo(${witch[locationOption].coordinates[index]})">${subLocation}</a>
+                  ${subLocation}
                 `).join(', ')}<br>
               `).join('')}
               ${this.getOptionalsWithValue(witch).map((optionalAttribute) => `
