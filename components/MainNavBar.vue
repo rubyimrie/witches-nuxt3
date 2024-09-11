@@ -79,6 +79,7 @@
          { name : 'About', url : '#', external: false, subpages : [
            { name : 'Overview', url : '/about', external: false },
            { name : 'References', url : '/reference', external: false },
+           { name : 'Further Reading', url : '/furtherreading', external: false },
            { name : 'Resources', url : '/resources', external: false },
            { name : 'Contact', url : '/contact', external: false },
          ] },
