@@ -126,14 +126,14 @@
           </LPopup>
           <LIcon :icon-anchor="iconAnchor" class-name="">
             <div class="icon-wrapper">
-              <div v-if="memorialList.includes(memorial.id)">
+              <div v-if="memorial.type === 'memorial'">
                 <img :src="memIcon" class="zoomed-in-img" />
               </div>
-              <div v-if="touristAttractionList.includes(memorial.id)">
-                <img :src="touristIcon" class="zoomed-in-img" />
-              </div>
-              <div v-if="sitesOfInterestList.includes(memorial.id)">
+              <div v-if="memorial.type === 'site of interest'">
                 <img :src="poiIcon" class="zoomed-in-img" />
+              </div>
+              <div v-if="memorial.type === 'tourist attraction'">
+                <img :src="touristIcon" class="zoomed-in-img" />
               </div>
               <img class="icon-shadow" :src="shadow" />
             </div>
@@ -167,11 +167,8 @@ export default {
       markers: [],
       originalMarkers: [],
       sparqlUrl: 'https://query.wikidata.org/sparql',
-
-      memorialList:['Q123249315','Q123250243','Q123249648','Q123249613','Q123249829','Q123250014','Q123249155','Q123250129','Q123250198','Q123250089','Q123249274','Q95568172','Q123249956','Q123250271','Q123250163','Q123249873'],
-      sitesOfInterestList:['Q123250431','Q103854635','Q123249352','Q123249755','Q65493510','Q127691255','Q7085231','Q6818041','Q5033345','Q123249733','Q125084095','Q127699733','Q1955420','Q124413739'],
-      touristAttractionList:['Q55076772','Q1633842','Q127691054','Q130234617','Q432422'],
       descriptions: {},
+      types:{},
       memorials:[], 
       filters: {
         poi: true,
@@ -186,30 +183,31 @@ export default {
   },
   computed: {
     filteredMarkers() {
-  return this.markers.filter(marker => {
-    // Check if the marker should be displayed based on the selected filters
-    if (this.filters.poi && this.sitesOfInterestList.includes(marker.id)) {
-      return true;
-    }
-    if (this.filters.memorial && this.memorialList.includes(marker.id)) {
-      return true;
-    }
-    if (this.filters.tourist && this.touristAttractionList.includes(marker.id)) {
-      return true;
-    }
-    return false; 
-  });
-},
+      return this.markers.filter((memorial) => {
+        if (memorial.type === 'memorial' && this.filters.memorial) {
+          return true;
+        } else if (memorial.type === 'site of interest' && this.filters.poi) {
+          return true;
+        } else if (memorial.type === 'tourist attraction' && this.filters.tourist) {
+          return true;
+        }
+        return false;
+      });
+    },
     iconAnchor: function () {
        return [11, 41];
      },
   },
   methods: {
-    async loadDescriptions() {
+    async loadTypesDescriptions() {
       const response = await fetch('/witch_memorials.json');
       const data = await response.json();
       this.descriptions = data.reduce((acc, item) => {
         acc[item.wikidata_code] = item.description;
+        return acc;
+      }, {});
+      this.types = data.reduce((acc, item) => {
+        acc[item.wikidata_code] = item.type;
         return acc;
       }, {});
     },
@@ -240,6 +238,7 @@ export default {
           let streetAddress = item.hasOwnProperty('address') ? item.address.value : '';
           let url = item.hasOwnProperty('url') ? item.url.value : '';
           let description = this.descriptions[id.split('/').pop()] || ''; 
+          let type= this.types[id.split('/').pop()] || ''; 
 
           let memorial = {
             id: id.split('/').pop(),
@@ -250,7 +249,8 @@ export default {
             imageUrl: imageUrl,
             streetAddress: streetAddress,
             url: url,
-            description: description 
+            description: description, 
+            type: type
           }
 
           this.markers.push(memorial);
@@ -292,7 +292,7 @@ export default {
   },
 
   async mounted() {
-    await this.loadDescriptions(); 
+    await this.loadTypesDescriptions(); 
     this.loadMemorials();
     console.log('Markers:', this.markers);
   },
