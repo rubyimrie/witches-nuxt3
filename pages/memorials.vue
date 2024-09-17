@@ -313,7 +313,7 @@ export default {
  .zoomed-in-img {
    float: left;
    width: 10px;
-   height: 45.6px;
+   height: 43px;
  }
 
  .icon-wrapper img {
