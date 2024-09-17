@@ -147,9 +147,9 @@
 
 <script>
 import { SPARQLQueryDispatcher } from '~/assets/js/SPARQLQueryDispatcher'
-import memIcon from '../public/images/witch-single-grey.png';
-import poiIcon from '../public/images/witch-single-orange.png';
-import touristIcon from '../public/images/witch-single-brown.png';
+import memIcon from '../public/images/memorial-icon-red.png';
+import poiIcon from '../public/images/memorial-icon-blue.png';
+import touristIcon from '../public/images/memorial-icon-green.png';
 import shadow from '../public/images/witch-single-shadow.png';
 
 definePageMeta({
@@ -303,3 +303,31 @@ export default {
 };
 </script>
 
+<style>
+.cluster-img {
+   float: left;
+   width: 72px;
+   height: 55px;
+ }
+
+ .zoomed-in-img {
+   float: left;
+   width: 10px;
+   height: 45.6px;
+ }
+
+ .icon-wrapper img {
+    background: none !important;
+    border: none !important;
+}
+
+.icon-shadow {
+    position: absolute;
+    top: 15px !important;
+    left: 0;
+    z-index: -1;
+    width: 25.6px;
+    height: 17.6px !important;
+    background: none !important;
+}
+</style>
