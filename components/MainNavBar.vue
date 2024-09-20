@@ -76,6 +76,7 @@
            { name : 'Ordeal Bubble Chart', url : '/ordeal', external: false },
            { name : 'Social Bubble Chart', url : '/social', external: false },
          ] },
+         { name: 'Memorials & Sites of Interest', url: '/memorials', external: false, subpages : [] },
          { name : 'About', url : '#', external: false, subpages : [
            { name : 'Overview', url : '/about', external: false },
            { name : 'Glossary', url : '/glossary', external: false },
@@ -83,7 +84,6 @@
            { name : 'Resources', url : '/resources', external: false },
            { name : 'Contact', url : '/contact', external: false },
          ] },
-         { name: 'Memorials & Sites of Interest', url: '/memorials', external: false, subpages : [] },
          { name: 'Blog', url: 'https://blogs.ed.ac.uk/witchcraft_visualisation/', external: true, subpages : [] }
        ]
      }
